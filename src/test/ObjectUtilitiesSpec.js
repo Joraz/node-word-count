@@ -1,5 +1,4 @@
 /// <reference path="../../typings/index.d.ts" />
-"use strict";
 var ObjectUtilities = require("../utilities/ObjectUtilities");
 var chai = require("chai");
 describe("ObjectUtilities Tests", function () {

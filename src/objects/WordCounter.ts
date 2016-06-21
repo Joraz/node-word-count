@@ -2,11 +2,7 @@ import {isDefined} from "../utilities/ObjectUtilities"
 import {WordLengthMap} from "./WordLengthMap";
 
 /**
- * Assumptions made when developing this:
- * 1. 'Words' are groups of characters separated by a space character.
- * 2. Common punctuation characters are not counted when defining word length.
- * 3. Abbreviation characters (&, for example) are a word by themselves. The length will be the character(s) themselves, not what they represent.
- * 4. Dates in numerical format (18/05/2016) are counted as a single word, and the delimiter characters are included
+ * Counting class. Accepts a string, and separates words based on whitespace characters
  */
 export class WordCounter
 {
@@ -17,7 +13,7 @@ export class WordCounter
 	{
 		if (!isDefined(contents))
 		{
-			throw new Error("WordCounter cannot accept a null or undefined 'contents' property");
+			throw new Error("WordCounter cannot accept a null or undefined 'contents' parameter");
 		}
 
 		this.wordLengthMap = new WordLengthMap();
@@ -25,6 +21,10 @@ export class WordCounter
 		this.parseContents(contents);
 	}
 
+	/**
+	 * Returns a string representation of the WordCounter
+	 * @returns {string}
+	 */
 	public toString(): string
 	{
 		let returnValue: string = "";
@@ -41,17 +41,10 @@ export class WordCounter
 		return returnValue;
 	}
 
-	private getAverageWordLength(): number
-	{
-
-		const wordCountTotal = this.wordLengthMap.getValuesMultipliedByKey().reduce((a: number, b: number) =>
-		                                                                            {
-			                                                                            return a + b;
-		                                                                            }, 0);
-
-		return wordCountTotal / this.length;
-	}
-
+	/**
+	 * Private helper method for the toString() method
+	 * @returns {string}
+	 */
 	private getFrequentlyOccurringString(): string
 	{
 		const mostFrequentCount: number = this.wordLengthMap.getMostFrequentValue();
@@ -73,25 +66,44 @@ export class WordCounter
 			const lastIndex = mostFrequentCountKeysLength - 1;
 
 			mostFrequentCountKeys.forEach((key: string, index: number) =>
-			                              {
-				                              if (index === 0)
-				                              {
-					                              returnStr += key;
-				                              }
-				                              else if (index != lastIndex)
-				                              {
-					                              returnStr += ", " + key;
-				                              }
-				                              else
-				                              {
-					                              returnStr += " & " + key;
-				                              }
-			                              });
+			{
+				if (index === 0)
+				{
+					returnStr += key;
+				}
+				else if (index != lastIndex)
+				{
+					returnStr += ", " + key;
+				}
+				else
+				{
+					returnStr += " & " + key;
+				}
+			});
 		}
 
 		return returnStr;
 	}
 
+	/**
+	 * Private method that calculates the average word length found
+	 * @returns {number}
+	 */
+	private getAverageWordLength(): number
+	{
+
+		const wordCountTotal = this.wordLengthMap.getValuesMultipliedByKey().reduce((a: number, b: number) =>
+		                                                                            {
+			                                                                            return a + b;
+		                                                                            }, 0);
+
+		return wordCountTotal / this.length;
+	}
+
+	/**
+	 * Parses the supplied file contents as a string and adds values to the map
+	 * @param contents
+	 */
 	private parseContents(contents: string): void
 	{
 		contents = contents.replace(/(\r\n|\n|\r)/gm, " ");

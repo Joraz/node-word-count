@@ -1,21 +1,20 @@
-"use strict";
 var ObjectUtilities_1 = require("../utilities/ObjectUtilities");
 var WordLengthMap_1 = require("./WordLengthMap");
 /**
- * Assumptions made when developing this:
- * 1. 'Words' are groups of characters separated by a space character.
- * 2. Common punctuation characters are not counted when defining word length.
- * 3. Abbreviation characters (&, for example) are a word by themselves. The length will be the character(s) themselves, not what they represent.
- * 4. Dates in numerical format (18/05/2016) are counted as a single word, and the delimiter characters are included
+ * Counting class. Accepts a string, and separates words based on whitespace characters
  */
 var WordCounter = (function () {
     function WordCounter(contents) {
         if (!ObjectUtilities_1.isDefined(contents)) {
-            throw new Error("WordCounter cannot accept a null or undefined 'contents' property");
+            throw new Error("WordCounter cannot accept a null or undefined 'contents' parameter");
         }
         this.wordLengthMap = new WordLengthMap_1.WordLengthMap();
         this.parseContents(contents);
     }
+    /**
+     * Returns a string representation of the WordCounter
+     * @returns {string}
+     */
     WordCounter.prototype.toString = function () {
         var returnValue = "";
         returnValue += "Word count = " + this.length + "\n";
@@ -25,12 +24,10 @@ var WordCounter = (function () {
         returnValue += this.getFrequentlyOccurringString();
         return returnValue;
     };
-    WordCounter.prototype.getAverageWordLength = function () {
-        var wordCountTotal = this.wordLengthMap.getValuesMultipliedByKey().reduce(function (a, b) {
-            return a + b;
-        }, 0);
-        return wordCountTotal / this.length;
-    };
+    /**
+     * Private helper method for the toString() method
+     * @returns {string}
+     */
     WordCounter.prototype.getFrequentlyOccurringString = function () {
         var mostFrequentCount = this.wordLengthMap.getMostFrequentValue();
         var mostFrequentCountKeys = this.wordLengthMap.getKeys(mostFrequentCount);
@@ -43,12 +40,12 @@ var WordCounter = (function () {
             returnStr += mostFrequentCountKeys[0] + " & " + mostFrequentCountKeys[1];
         }
         else {
-            var lastIndex_1 = mostFrequentCountKeysLength - 1;
+            var lastIndex = mostFrequentCountKeysLength - 1;
             mostFrequentCountKeys.forEach(function (key, index) {
                 if (index === 0) {
                     returnStr += key;
                 }
-                else if (index != lastIndex_1) {
+                else if (index != lastIndex) {
                     returnStr += ", " + key;
                 }
                 else {
@@ -58,6 +55,20 @@ var WordCounter = (function () {
         }
         return returnStr;
     };
+    /**
+     * Private method that calculates the average word length found
+     * @returns {number}
+     */
+    WordCounter.prototype.getAverageWordLength = function () {
+        var wordCountTotal = this.wordLengthMap.getValuesMultipliedByKey().reduce(function (a, b) {
+            return a + b;
+        }, 0);
+        return wordCountTotal / this.length;
+    };
+    /**
+     * Parses the supplied file contents as a string and adds values to the map
+     * @param contents
+     */
     WordCounter.prototype.parseContents = function (contents) {
         var _this = this;
         contents = contents.replace(/(\r\n|\n|\r)/gm, " ");
@@ -78,6 +89,6 @@ var WordCounter = (function () {
         });
     };
     return WordCounter;
-}());
+})();
 exports.WordCounter = WordCounter;
 //# sourceMappingURL=WordCounter.js.map

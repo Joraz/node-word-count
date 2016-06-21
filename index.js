@@ -1,5 +1,4 @@
 /// <reference path="./typings/index.d.ts" />
-"use strict";
 var fs = require("fs");
 var WordCounter_1 = require("./src/objects/WordCounter");
 var ObjectUtilities_1 = require("./src/utilities/ObjectUtilities");

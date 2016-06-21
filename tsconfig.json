@@ -4,8 +4,13 @@
     "target": "es5",
     "sourceMap": true
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "files": ["**/*.ts"]
+  "files": [
+    "src/objects/WordCounter.ts",
+    "src/objects/WordLengthMap.ts",
+    "src/test/ObjectUtilitiesSpec.ts",
+    "src/test/WordCounterSpec.ts",
+    "src/test/WordLengthMapSpec.ts",
+    "src/utilities/ObjectUtilities.ts",
+    "index.ts"
+  ]
 }
